@@ -1,0 +1,82 @@
+<?php
+if( !isset($_GET["table"]) )
+{
+    die("12FatalError21");
+}
+else
+{
+   $table = $_GET["table"];
+}
+if( !isset($_GET["fields"]) )
+{
+    $fields = "*";
+}
+else
+{
+     $fields = $_GET["fields"];
+}
+if( !isset($_GET["where"]) )
+{
+     $where = "";
+}
+else 
+{
+     $where = str_replace("-","=",$_GET["where"]);
+}
+if( !isset($_GET["sortby"]) )
+{
+     $sortby = "";
+}
+else 
+{
+     $sortby = $_GET["sortby"];
+}
+if($table == "payment" || $table == "log" || $table == "order")
+{
+	echo "12FatalError21";
+}
+else
+{
+    
+    $servername  = "localhost";
+
+    $username = "sportupg_visit";
+
+    $password = "visit11";
+
+    $dbname = "sportupg_wtg";
+
+    $con = mysql_connect($servername,$username,$password,$dbname) or die("12FatalError21");
+
+    mysql_select_db($dbname);
+
+    $sql="SET NAMES utf8";
+    $res = mysql_query($sql,$con);
+
+    $sql ='SELECT '.$fields.' FROM '.$table.' '.$where.' '.$sortby;
+
+    $res = mysql_query($sql,$con);
+
+
+    if(mysql_num_rows($res) > 0)
+    {  
+
+echo '[';
+    	while($row = mysql_fetch_assoc($res))
+    	{
+            echo json_encode($row,JSON_UNESCAPED_UNICODE);
+echo ',';
+    		
+    	}
+echo ']';
+      
+         
+   
+    }
+    else
+    {
+	    echo "12FatalError21".mysql_error();
+    }
+
+}
+?>
